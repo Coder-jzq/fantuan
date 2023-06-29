@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fantuan.mapper.FtCouponMapper">
+    
+    <resultMap type="FtCoupon" id="FtCouponResult">
+        <result property="id"    column="id"    />
+        <result property="couponId"    column="coupon_id"    />
+        <result property="discount"    column="discount"    />
+        <result property="edu"    column="edu"    />
+    </resultMap>
+
+    <sql id="selectFtCouponVo">
+        select id, coupon_id, discount, edu from ft_coupon
+    </sql>
+
+    <select id="selectFtCouponList" parameterType="FtCoupon" resultMap="FtCouponResult">
+        <include refid="selectFtCouponVo"/>
+        <where>  
+            <if test="couponId != null  and couponId != ''"> and coupon_id = #{couponId}</if>
+            <if test="discount != null  and discount != ''"> and discount = #{discount}</if>
+            <if test="edu != null  and edu != ''"> and edu = #{edu}</if>
+        </where>
+    </select>
+    
+    <select id="selectFtCouponById" parameterType="Long" resultMap="FtCouponResult">
+        <include refid="selectFtCouponVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFtCoupon" parameterType="FtCoupon" useGeneratedKeys="true" keyProperty="id">
+        insert into ft_coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponId != null">coupon_id,</if>
+            <if test="discount != null">discount,</if>
+            <if test="edu != null">edu,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couponId != null">#{couponId},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="edu != null">#{edu},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFtCoupon" parameterType="FtCoupon">
+        update ft_coupon
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couponId != null">coupon_id = #{couponId},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="edu != null">edu = #{edu},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFtCouponById" parameterType="Long">
+        delete from ft_coupon where id = #{id}
+    </delete>
+
+    <delete id="deleteFtCouponByIds" parameterType="String">
+        delete from ft_coupon where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

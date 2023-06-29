@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fantuan.mapper.FtOrderMapper">
+    
+    <resultMap type="FtOrder" id="FtOrderResult">
+        <result property="id"    column="id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="businessId"    column="business_id"    />
+        <result property="priceBegin"    column="price_begin"    />
+        <result property="priceEnd"    column="price_end"    />
+        <result property="status"    column="status"    />
+        <result property="isGroup"    column="is_group"    />
+        <result property="orderNumber"    column="order_number"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="goodsInfo"    column="goods_info"    />
+        <result property="userName"    column="user_name"    />
+    </resultMap>
+
+    <sql id="selectFtOrderVo">
+        select id, order_id, user_id, business_id, price_begin, price_end, status, is_group, order_number, order_time, goods_info, user_name from ft_order
+    </sql>
+
+    <select id="selectFtOrderList" parameterType="FtOrder" resultMap="FtOrderResult">
+        <include refid="selectFtOrderVo"/>
+        <where>  
+            <if test="orderId != null  and orderId != ''"> and order_id = #{orderId}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="businessId != null  and businessId != ''"> and business_id = #{businessId}</if>
+            <if test="priceBegin != null "> and price_begin = #{priceBegin}</if>
+            <if test="priceEnd != null "> and price_end = #{priceEnd}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="isGroup != null  and isGroup != ''"> and is_group = #{isGroup}</if>
+            <if test="orderNumber != null  and orderNumber != ''"> and order_number = #{orderNumber}</if>
+            <if test="orderTime != null "> and order_time = #{orderTime}</if>
+            <if test="goodsInfo != null  and goodsInfo != ''"> and goods_info = #{goodsInfo}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectFtOrderById" parameterType="Long" resultMap="FtOrderResult">
+        <include refid="selectFtOrderVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFtOrder" parameterType="FtOrder">
+        insert into ft_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="businessId != null">business_id,</if>
+            <if test="priceBegin != null">price_begin,</if>
+            <if test="priceEnd != null">price_end,</if>
+            <if test="status != null">status,</if>
+            <if test="isGroup != null">is_group,</if>
+            <if test="orderNumber != null">order_number,</if>
+            <if test="orderTime != null">order_time,</if>
+            <if test="goodsInfo != null">goods_info,</if>
+            <if test="userName != null">user_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="businessId != null">#{businessId},</if>
+            <if test="priceBegin != null">#{priceBegin},</if>
+            <if test="priceEnd != null">#{priceEnd},</if>
+            <if test="status != null">#{status},</if>
+            <if test="isGroup != null">#{isGroup},</if>
+            <if test="orderNumber != null">#{orderNumber},</if>
+            <if test="orderTime != null">#{orderTime},</if>
+            <if test="goodsInfo != null">#{goodsInfo},</if>
+            <if test="userName != null">#{userName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFtOrder" parameterType="FtOrder">
+        update ft_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="businessId != null">business_id = #{businessId},</if>
+            <if test="priceBegin != null">price_begin = #{priceBegin},</if>
+            <if test="priceEnd != null">price_end = #{priceEnd},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="isGroup != null">is_group = #{isGroup},</if>
+            <if test="orderNumber != null">order_number = #{orderNumber},</if>
+            <if test="orderTime != null">order_time = #{orderTime},</if>
+            <if test="goodsInfo != null">goods_info = #{goodsInfo},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFtOrderById" parameterType="Long">
+        delete from ft_order where id = #{id}
+    </delete>
+
+    <delete id="deleteFtOrderByIds" parameterType="String">
+        delete from ft_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

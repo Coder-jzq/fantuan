@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fantuan.mapper.FtGoodsMapper">
+    
+    <resultMap type="FtGoods" id="FtGoodsResult">
+        <result property="id"    column="id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="name"    column="name"    />
+        <result property="img"    column="img"    />
+        <result property="price"    column="price"    />
+        <result property="status"    column="status"    />
+        <result property="shopId"    column="shop_id"    />
+    </resultMap>
+
+    <sql id="selectFtGoodsVo">
+        select id, goods_id, name, img, price, status, shop_id from ft_goods
+    </sql>
+
+    <select id="selectFtGoodsList" parameterType="FtGoods" resultMap="FtGoodsResult">
+        <include refid="selectFtGoodsVo"/>
+        <where>  
+            <if test="goodsId != null  and goodsId != ''"> and goods_id = #{goodsId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="shopId != null  and shopId != ''"> and shop_id = #{shopId}</if>
+        </where>
+    </select>
+    
+    <select id="selectFtGoodsById" parameterType="Long" resultMap="FtGoodsResult">
+        <include refid="selectFtGoodsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFtGoods" parameterType="FtGoods" useGeneratedKeys="true" keyProperty="id">
+        insert into ft_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="name != null">name,</if>
+            <if test="img != null">img,</if>
+            <if test="price != null">price,</if>
+            <if test="status != null">status,</if>
+            <if test="shopId != null">shop_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="img != null">#{img},</if>
+            <if test="price != null">#{price},</if>
+            <if test="status != null">#{status},</if>
+            <if test="shopId != null">#{shopId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFtGoods" parameterType="FtGoods">
+        update ft_goods
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFtGoodsById" parameterType="Long">
+        delete from ft_goods where id = #{id}
+    </delete>
+
+    <delete id="deleteFtGoodsByIds" parameterType="String">
+        delete from ft_goods where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

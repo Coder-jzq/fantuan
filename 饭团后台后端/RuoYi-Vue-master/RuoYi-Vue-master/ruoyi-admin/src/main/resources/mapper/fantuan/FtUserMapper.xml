@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.fantuan.mapper.FtUserMapper">
+    
+    <resultMap type="FtUser" id="FtUserResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="username"    column="username"    />
+        <result property="password"    column="password"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="edu"    column="edu"    />
+        <result property="power"    column="power"    />
+        <result property="faceImg"    column="face_img"    />
+        <result property="status"    column="status"    />
+        <result property="openid"    column="openid"    />
+        <result property="shopNum"    column="shop_num"    />
+    </resultMap>
+
+    <sql id="selectFtUserVo">
+        select id, user_id, username, password, name, phone, edu, power, face_img, status, openid, shop_num from ft_user
+    </sql>
+
+    <select id="selectFtUserList" parameterType="FtUser" resultMap="FtUserResult">
+        <include refid="selectFtUserVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="edu != null  and edu != ''"> and edu = #{edu}</if>
+            <if test="power != null  and power != ''"> and power = #{power}</if>
+            <if test="faceImg != null  and faceImg != ''"> and face_img = #{faceImg}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="shopNum != null "> and shop_num = #{shopNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectFtUserById" parameterType="Long" resultMap="FtUserResult">
+        <include refid="selectFtUserVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFtUser" parameterType="FtUser" useGeneratedKeys="true" keyProperty="id">
+        insert into ft_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="username != null and username != ''">username,</if>
+            <if test="password != null">password,</if>
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="edu != null">edu,</if>
+            <if test="power != null">power,</if>
+            <if test="faceImg != null">face_img,</if>
+            <if test="status != null">status,</if>
+            <if test="openid != null">openid,</if>
+            <if test="shopNum != null">shop_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="edu != null">#{edu},</if>
+            <if test="power != null">#{power},</if>
+            <if test="faceImg != null">#{faceImg},</if>
+            <if test="status != null">#{status},</if>
+            <if test="openid != null">#{openid},</if>
+            <if test="shopNum != null">#{shopNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFtUser" parameterType="FtUser">
+        update ft_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="edu != null">edu = #{edu},</if>
+            <if test="power != null">power = #{power},</if>
+            <if test="faceImg != null">face_img = #{faceImg},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="openid != null">openid = #{openid},</if>
+            <if test="shopNum != null">shop_num = #{shopNum},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFtUserById" parameterType="Long">
+        delete from ft_user where id = #{id}
+    </delete>
+
+    <delete id="deleteFtUserByIds" parameterType="String">
+        delete from ft_user where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
